@@ -27,6 +27,7 @@ docker rmi <image_name>
 # --env | -e <param> imposta una variable d'ambiente nel container
 # -p <host_port>:<conatiner_port> opera il port forwarding
 # --network <param> connette il container ad una specifica sottorete
+# --restart <param> cambia la strategia di riavvio del conatiner
 # --rm funziona se non senza -d, ed elimina il container una volta staccati dallo std output con CRTL+C
 
 docker run -d --name greeting -e SIMPLE_ENV="Yes, I'm here\!" -p 8081:8080 greetings
@@ -76,6 +77,10 @@ docker network rm <subnet_name>
 # Connettere/disconnettere un container da una sottorete
 docker network connect <subnet_name> <container_name>
 docker network disconnect <subnet_name> <container_name>
+
+# Cambiare la restart policy
+# Alcune sono: always, unless-stopped, on-failure:<failure_counter>
+docker update --restart=on-failure:3 <container_name>
 
 # Qualche run di database
 # Postgresql
