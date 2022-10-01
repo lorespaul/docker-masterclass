@@ -32,6 +32,10 @@ docker rmi <image_name>
 
 docker run -d --name greeting -e SIMPLE_ENV="Yes, I'm here\!" -p 8081:8080 greetings
 
+# Eliminare un container
+# -f o --force server solo se il container è running
+docker rmi -f <container_name>
+
 # Testare il server
 # 1) Ritorna "Hello $WHO_TO_GREET!" -> "Hello World!"
 curl -XGET http://localhost:8081/greet
@@ -91,3 +95,6 @@ docker run -d -it --network kitwts-subnet --name my-postgres \
   -p 5432:5432 postgres
 # Redis
 docker run --name my-redis -d -p 6378:6379 redis:alpine
+
+# Run con docker compose
+docker-compose -p example up -d --force-recreate --build

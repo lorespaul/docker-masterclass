@@ -1,0 +1,40 @@
+version: '3'
+services:
+  node_server:
+    container_name: node-server # si può omettere, il nome del container sara quello dell'oggetto root
+    build:
+      context: ./
+      args:
+      - WHO_TO_GREET="World"
+      - WHO_TO_NOT_GREET="Moon"
+    environment:
+    - SIMPLE_ENV="Yes, I'm here!"
+    - PG_ENABLED=true
+    ports:
+    - "8083:8080"
+    networks:
+    - example_subnet
+    depends_on:
+      - pg_server
+    # restart: always può essere usato per lanciare automaticamente il container all'avvio di docker
+# deploy resources and healtcheck method can be declared
+  pg_server:
+    container_name: pg-server
+    image: postgres
+    environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=betacom
+    - POSTGRES_DB=example
+    - PGDATA=/var/lib/postgresql/data/my_pgdata
+    volumes:
+    - "./init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql"
+    ports:
+    - "5434:5432"
+    networks:
+    - example_subnet
+
+networks:
+  example_subnet:
+    name: example-subnet
+    # external: external può essere usato per utilizzare una rete già esistente
+    #   name: my-subnet
