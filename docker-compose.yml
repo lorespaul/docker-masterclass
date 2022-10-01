@@ -1,7 +1,7 @@
 version: '3'
 services:
   node_server:
-    container_name: node-server # si può omettere, il nome del container sara quello dell'oggetto root
+    container_name: node-server # si può omettere, il nome del container sarà quello dell'oggetto root
     build:
       context: ./
       args:
