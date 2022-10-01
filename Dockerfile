@@ -16,6 +16,7 @@ ENV WHO_TO_GREET=$WHO_TO_GREET
 WORKDIR /usr/src/app
 
 # Copia il contenuto della directory corrente (primo parametro) dentro alla home dell'immagine (secondo parametro)
+# Si può usare il file .gitignore per escludere file e cartelle come per il .gitignore
 COPY . ./
 
 # Dichiara la porta su cui sarà raggiungibile il server
