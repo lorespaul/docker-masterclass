@@ -76,3 +76,13 @@ docker network rm <subnet_name>
 # Connettere/disconnettere un container da una sottorete
 docker network connect <subnet_name> <container_name>
 docker network disconnect <subnet_name> <container_name>
+
+# Qualche run di database
+# Postgresql
+docker run -d -it --network kitwts-subnet --name my-postgres \
+  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=Betacom2022 \
+  -e PGDATA=/var/lib/postgresql/data/pgdata   
+  -v "$(pwd)/postgres:/var/lib/postgresql/data" \
+  -p 5432:5432 postgres
+# Redis
+docker run --name my-redis -d -p 6378:6379 redis:alpine
