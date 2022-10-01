@@ -55,6 +55,8 @@ docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon
 docker run --rm --name greeting_debug -v "$(pwd)/:/usr/src/app" -e SIMPLE_ENV="Yes, I'm here\!" -p 8082:8080 greetings_debug
 # Il container usa nodemon per lanciare l'applicazione cosi quando il file server.js nodemon lo rilancia automaticamente
 
+# Entrare nel container al suo avvio
+docker run --rm --name busy -it busybox sh
 
 # Cancellare una lista di immagine filtrate con grep
 docker rmi $(docker images | grep none | awk '{print $3}')
