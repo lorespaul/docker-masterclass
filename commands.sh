@@ -13,6 +13,10 @@
 
 docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon" -t greetings .
 
+# Eliminare un immagine
+# In generale, per referenziare un oggetto docker si può usare anche il suo id
+docker rmi <image_name>
+
 # Run del container
 
 # Il "greetings" alla fine indica il tag dell'immagine
@@ -22,6 +26,7 @@ docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon
 # --name <param> da un nome al container
 # --env | -e <param> imposta una variable d'ambiente nel container
 # -p <host_port>:<conatiner_port> opera il port forwarding
+# --network <param> connette il container ad una specifica sottorete
 # --rm funziona se non senza -d, ed elimina il container una volta staccati dallo std output con CRTL+C
 
 docker run -d --name greeting -e SIMPLE_ENV="Yes, I'm here\!" -p 8081:8080 greetings
@@ -60,3 +65,14 @@ docker run --rm --name busy -it busybox sh
 
 # Cancellare una lista di immagine filtrate con grep
 docker rmi $(docker images | grep none | awk '{print $3}')
+
+# Creare un immagine da un container
+docker commit <existent_container_name> <new_image_name>
+
+# Creare/cancellare una sottorete
+docker network create <subnet_name>
+docker network rm <subnet_name>
+
+# Connettere/disconnettere un container da una sottorete
+docker network connect <subnet_name> <container_name>
+docker network disconnect <subnet_name> <container_name>
