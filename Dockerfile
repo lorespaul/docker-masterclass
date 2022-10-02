@@ -36,5 +36,5 @@ RUN npm install && \
 # In questo caso viene usato node, ma si poteva usare anche npm start
 ENTRYPOINT [ "node" ]
 # Si poteva anche eseguire ENTRYPOINT [ "node", "server.js" ] oppure CMD [ "node", "server.js" ]
-# CMD ci da la possibiltà di passare degli argomenti da concatenare a CMD alla run del container
+# CMD ci da la possibiltà di passare degli argomenti da concatenare ad ENTRYPOINT alla run del container
 CMD [ "src/server.js" ]
