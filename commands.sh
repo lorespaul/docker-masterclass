@@ -75,6 +75,10 @@ docker rmi $(docker images | grep none | awk '{print $3}')
 # Creare un immagine da un container
 docker commit <existent_container_name> <new_image_name>
 
+# Stampare la lista delle subnet
+# bridge, host e none sono le subnet di default
+docker network ls
+
 # Creare/cancellare una sottorete
 docker network create <subnet_name>
 docker network rm <subnet_name>
