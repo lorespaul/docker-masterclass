@@ -4,21 +4,27 @@ services:
     build:
       context: ./
       args:
-      - WHO_TO_GREET="World"
-      - WHO_TO_NOT_GREET="Moon"
+      - WHO_TO_GREET=World
+      - WHO_TO_NOT_GREET="Moon
     scale: 1 # una sola replica
     environment:
-    - SIMPLE_ENV="Yes, I'm here!"
+    - SIMPLE_ENV=Yes, I'm here!
     - PG_ENABLED=true
     expose:
     - "8080"
-    restart: unless-stopped
+    restart: unless-stopped # always può essere usato per lanciare automaticamente il container all'avvio di docker
     networks:
     - example_subnet
     depends_on:
     - pg-server
-    # restart: always può essere usato per lanciare automaticamente il container all'avvio di docker
-# container resources and healtcheck method can be declared
+    deploy:  # container resources limits and reservations
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          memory: 128M
+    # an healtcheck method can be declared
   pg-server:
     image: postgres
     environment:
