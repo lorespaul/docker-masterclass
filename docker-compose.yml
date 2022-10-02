@@ -40,7 +40,7 @@ services:
     networks:
     - example_subnet
   nginx:
-    container_name: balancer
+    container_name: balancer # un nome fisso per il container, che altrimenti sarebbe <app_name>-<service_name>-<replica_counter>
     image: nginx:stable
     restart: unless-stopped
     ports:
