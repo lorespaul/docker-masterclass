@@ -17,7 +17,7 @@ services:
     depends_on:
       - pg_server
     # restart: always può essere usato per lanciare automaticamente il container all'avvio di docker
-# deploy resources and healtcheck method can be declared
+# container resources and healtcheck method can be declared
   pg_server:
     container_name: pg-server
     image: postgres
