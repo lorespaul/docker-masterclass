@@ -35,6 +35,7 @@ RUN npm install && \
 # Dichiara il comando che verrà eseguito alla partenza del container
 # In questo caso viene usato node, ma si poteva usare anche npm start
 ENTRYPOINT [ "node" ]
-# Si poteva anche eseguire ENTRYPOINT [ "node", "server.js" ] oppure CMD [ "node", "server.js" ]
-# CMD ci da la possibiltà di passare degli argomenti da concatenare ad ENTRYPOINT alla run del container
+# Si poteva anche eseguire ENTRYPOINT [ "node", "src/server.js" ] oppure CMD [ "node", "server.js" ]
+# CMD ci da la possibiltà di fare l'override del file .js da lanciare con il comando docker run, mentre ENTRYPOINT non è sovrascrivibile
+# In questo caso CMD opera come un placeholder, ma bisogna stare attenti ad usare ENTRYPOINT nella forma con le parentesi []
 CMD [ "src/server.js" ]

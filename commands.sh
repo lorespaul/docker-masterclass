@@ -63,7 +63,7 @@ cat text.txt
 # Run del container in un volume
 # Con questo metodo è possibile sviluppare direttamente dentro al container
 docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon" -f Dockerfile.debug -t greetings_debug .
-docker run --rm --name greeting_debug -v "$(pwd)/:/usr/src/app" -e SIMPLE_ENV="Yes, I'm here\!" -p 8082:8080 greetings_debug
+docker run --rm --name greeting-debug -v "$(pwd)/:/usr/src/app" -e SIMPLE_ENV="Yes, I'm here\!" -p 8082:8080 greetings_debug
 # Il container usa nodemon per lanciare l'applicazione cosi quando il file server.js nodemon lo rilancia automaticamente
 
 # Entrare nel container al suo avvio
