@@ -1,7 +1,6 @@
 version: '3'
 services:
-  node_server:
-    container_name: node-server # si può omettere, il nome del container sarà quello dell'oggetto root
+  node-server: # meglio usare - che _ per i nomi dei container, altrimenti ci potrebbero essere dei problemi di connettività (url malformed)
     build:
       context: ./
       args:
@@ -15,11 +14,10 @@ services:
     networks:
     - example_subnet
     depends_on:
-      - pg_server
+      - pg-server
     # restart: always può essere usato per lanciare automaticamente il container all'avvio di docker
 # container resources and healtcheck method can be declared
-  pg_server:
-    container_name: pg-server
+  pg-server:
     image: postgres
     environment:
     - POSTGRES_USER=root
