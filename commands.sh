@@ -93,9 +93,9 @@ docker update --restart=on-failure:3 <container_name>
 
 # Qualche run di database
 # Postgresql
-docker run -d -it --network kitwts-subnet --name my-postgres \
+docker run -d -it --network my-subnet --name my-postgres \
   -e POSTGRES_USER=root -e POSTGRES_PASSWORD=Betacom2022 \
-  -e PGDATA=/var/lib/postgresql/data/pgdata   
+  -e PGDATA=/var/lib/postgresql/data/pgdata \
   -v "$(pwd)/postgres:/var/lib/postgresql/data" \
   -p 5432:5432 postgres
 # Redis
