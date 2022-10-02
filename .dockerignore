@@ -1,1 +1,8 @@
+.git
+.gitignore
 node_modules
+migrations
+Dockerfile
+Dockerfile.debug
+docker-compose.yml
+commands.sh

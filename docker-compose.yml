@@ -25,9 +25,9 @@ services:
     - POSTGRES_USER=root
     - POSTGRES_PASSWORD=betacom
     - POSTGRES_DB=example
-    - PGDATA=/var/lib/postgresql/data/my_pgdata
-    volumes:
-    - "./init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql"
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes: # un volume può caricare anche un solo file (non è per forza una cartella)
+    - "./migrations/init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql"
     ports:
     - "5434:5432"
     networks:

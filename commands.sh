@@ -97,4 +97,22 @@ docker run -d -it --network kitwts-subnet --name my-postgres \
 docker run --name my-redis -d -p 6378:6379 redis:alpine
 
 # Run con docker compose
-docker-compose -p example up -d --force-recreate --build
+# Dalla versione 2 si può usare docker compose, prima il comando era docker-compose
+# -p indica il nome dell'applicazione
+# -d opera il detach come per la docker run
+# --force-recreate forza la distruzione dei container precedenti (se presenti)
+# --build fa si che vengano nuovamente "buildate" le immagini
+docker compose -p example up -d --force-recreate --build
+
+# Fermare tutti i container del docker compose
+docker compose -p example stop
+
+# Cancellare tutti i container in stop del docker compose
+# -s i container vengono anche fermati, così da poter essere cancellati
+# -f la cli non chiede conferma dell'operazione
+# -v vengono cancellati anche tutti i volumi associati
+docker compose -p example rm -s -v -f
+
+# Testare il server
+# 1) Ritorna il contenuto della tabella users creata e riepita con il file ./migrations/init-pg.sql
+curl -XGET http://localhost:8083/db_users
