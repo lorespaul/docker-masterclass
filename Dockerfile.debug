@@ -26,5 +26,5 @@ EXPOSE 8080
 # RUN npm install
 
 # Dichiara il comando che verrà eseguito alla partenza del container
-# In questo caso viene usato node, ma si poteva usare anche npm start
+# Installa i pacchetti npm e lancia l'applicazione con nodemon
 ENTRYPOINT npm install && npm run debug
