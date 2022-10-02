@@ -53,7 +53,8 @@ docker logs -f greeting
 # Entrare nel container da terminale
 # Qualche opzione di exec:
 # -it, -i -> mantiene aperto lo std input, -t alloca un tty (una specie di terminale)
-# sh è il comando che viene eseguito nel container, in questo caso sh è l'interprete che lanciato nel tty ci permette di "entrare" nel container
+# sh è il comando che viene eseguito nel container (si può usare anche bash se presente nel container)
+# sh è l'interprete che lanciato nel tty ci permette di "entrare" nel container
 docker exec -it greeting sh
 # Ora possiamo vedere che l ARG, anche se non passato ad un ENV, è stato stampato correttamente nel file text.txt
 cat text.txt
