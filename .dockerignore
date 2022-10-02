@@ -2,6 +2,7 @@
 .gitignore
 node_modules
 migrations
+nginx
 Dockerfile
 Dockerfile.debug
 docker-compose.yml

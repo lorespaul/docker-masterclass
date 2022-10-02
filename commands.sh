@@ -101,6 +101,9 @@ docker run -d -it --network kitwts-subnet --name my-postgres \
 # Redis
 docker run --name my-redis -d -p 6378:6379 redis:alpine
 
+
+#### DOCKER COMPOSE
+
 # Run con docker compose
 # Dalla versione 2 si può usare docker compose, prima il comando era docker-compose
 # -p indica il nome dell'applicazione
@@ -108,6 +111,18 @@ docker run --name my-redis -d -p 6378:6379 redis:alpine
 # --force-recreate forza la distruzione dei container precedenti (se presenti)
 # --build fa si che vengano nuovamente "buildate" le immagini
 docker compose -p example up -d --force-recreate --build
+
+# Utilizzando nginx come reverse proxy è possibile scalare le repliche del node-server
+# Senza nginx non si potrebbe fare perchè la seconda replica tenterenne il bind della stessa porta sulla macchina host
+# Il balancing viene fatto direttamente dal docker engine
+docker compose -p example up -d --scale node-server=2
+
+# Entrando nel container postgres
+docker exec -it example-pg-server-1 bash
+# Installa il comando ping 
+apt update && apt install -y iputils-ping
+# Privando a fare il ping più volte su node-server si vede risponde sempre un indirizzo ip diverso
+ping node-server
 
 # Fermare tutti i container del docker compose
 docker compose -p example stop

@@ -6,11 +6,13 @@ services:
       args:
       - WHO_TO_GREET="World"
       - WHO_TO_NOT_GREET="Moon"
+    scale: 1 # una sola replica
     environment:
     - SIMPLE_ENV="Yes, I'm here!"
     - PG_ENABLED=true
-    ports:
-    - "8083:8080"
+    expose:
+    - "8080"
+    restart: unless-stopped
     networks:
     - example_subnet
     depends_on:
@@ -25,11 +27,24 @@ services:
     - POSTGRES_DB=example
     - PGDATA=/var/lib/postgresql/data/pgdata
     volumes: # un volume può caricare anche un solo file (non è per forza una cartella)
-    - "./migrations/init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql"
+    - ./migrations/init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql
     ports:
     - "5434:5432"
+    restart: unless-stopped
     networks:
     - example_subnet
+  nginx:
+    container_name: balancer
+    image: nginx:stable
+    restart: unless-stopped
+    ports:
+    - "8083:8080"
+    volumes: # con :ro si aggiunge il volume in readonly
+    - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+    - example_subnet
+    depends_on:
+    - node-server
 
 networks:
   example_subnet:
