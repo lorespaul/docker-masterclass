@@ -53,7 +53,5 @@ services:
     - node-server
 
 networks:
-  example_subnet:
+  example_subnet: # la subnet viene creata in automatico se non ancora presente
     name: example-subnet
-    # external: external può essere usato per utilizzare una rete già esistente
-    #   name: my-subnet
