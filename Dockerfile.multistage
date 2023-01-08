@@ -1,0 +1,44 @@
+# La multistage build può essere utilizzata per buildare il codice in un container separato
+# in modo da portare solo la build nel container finale.
+# È utile per mantenere piccole dimensioni del container finale.
+# Questa tecnica viene utilizzata inoltre per evitare di buildare il codice direttamente sulla macchina host.
+# Così se la macchina host cambia non si devono reinstallare tutti i pacchetti necessari alla build.
+
+# Usiamo la stessa immagine del container release per buildare
+# ed evitare problemi di compatibilità di architettura
+FROM node:16-alpine AS gcc
+WORKDIR /usr/src
+# copia il codice sorgente
+COPY src/native .
+# aggiorna i pacchetti e installa gcc e musl-dev necessari a buildare com compile.sh
+RUN apk update && \
+    apk add gcc musl-dev && \
+    ./compile.sh
+
+# Di seguito il Dockerfile.debug, con in più la build del codice C copiata dallo stage sopra
+FROM node:16-alpine as release
+LABEL maintainer="Lorenzo Daneo <l.daneo@betacom.it>"
+ARG WHO_TO_GREET
+ARG WHO_TO_NOT_GREET
+ENV WHO_TO_GREET=$WHO_TO_GREET
+WORKDIR /usr/src/app
+COPY . ./
+
+# --------------------> Copia della build del codice nativo
+# Se non viene specificato un alias FROM ... AS ... nel from si può usare l'indice (in questa caso --from=0)
+COPY --from=gcc /usr/src/mylib ./mylib
+
+# aggiorna i pacchetti con apk e installa musl-dev necessario al runtime
+# entrare nel container con il comando "docker exec -it greeting-multistage sh" ed eseguire "./mylib" come dismostrazione
+RUN apk update && \
+    apk add musl-dev && \
+    ./mylib && \
+    npm install && \
+    echo "I will greet $WHO_TO_GREET..." && \
+    echo "...and I will not greet $WHO_TO_NOT_GREET" && \
+    echo "I will greet $WHO_TO_GREET..." > text.txt && \
+    echo "...and I will not greet $WHO_TO_NOT_GREET" >> text.txt
+
+EXPOSE 8080
+
+ENTRYPOINT exec npm start

@@ -1,3 +1,4 @@
 node_modules
 pgdata
 .DS_Store
+src/native/mylib

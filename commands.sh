@@ -136,3 +136,8 @@ docker compose -p example rm -s -v -f
 # Testare il server
 # 1) Ritorna il contenuto della tabella users creata e riepita con il file ./migrations/init-pg.sql
 curl -XGET http://localhost:8083/db_users
+
+# Multistage build
+docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon" -f Dockerfile.multistage -t greetings_multistage .
+docker run --rm --name greeting-multistage -e SIMPLE_ENV="Yes, I'm here\!" -p 8084:8080 greetings_multistage
+curl -XPOST -H "Content-Type: application/json" -d '{"executable": "./mylib"}' http://localhost:8084/exec_process

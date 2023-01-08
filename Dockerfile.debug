@@ -2,7 +2,7 @@
 FROM node:16-alpine
 
 # Solo una label dove mettere le referenze del creatore/manutentore del file
-LABEL maintainer="l.daneo@betacom.it"
+LABEL maintainer="Lorenzo Daneo <l.daneo@betacom.it>"
 
 # Un ARG è un argomento che viene passato al docker file, e non esiste nel contesto del container
 # Non si posso usare ARG nel CMD/ENTRYPOINT!
