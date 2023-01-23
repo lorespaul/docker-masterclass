@@ -34,7 +34,7 @@ docker run -d --name greeting -e SIMPLE_ENV="Yes, I'm here\!" -p 8081:8080 greet
 
 # Eliminare un container
 # -f o --force server solo se il container è running
-docker rmi -f <container_name>
+docker rm -f <container_name>
 
 # Testare il server
 # 1) Ritorna "Hello $WHO_TO_GREET!" -> "Hello World!"
@@ -121,8 +121,12 @@ docker compose -p example up -d --scale node-server=2
 docker exec -it example-pg-server-1 bash
 # Installa il comando ping 
 apt update && apt install -y iputils-ping
-# Privando a fare il ping più volte su node-server si vede risponde sempre un indirizzo ip diverso
+# Provando a fare il ping più volte su node-server si vede risponde sempre un indirizzo ip diverso
 ping node-server
+
+# Testare il server
+# 1) Ritorna il contenuto della tabella users creata e riepita con il file ./migrations/init-pg.sql
+curl -XGET http://localhost:8083/db_users
 
 # Fermare tutti i container del docker compose
 docker compose -p example stop
@@ -130,12 +134,8 @@ docker compose -p example stop
 # Cancellare tutti i container in stop del docker compose
 # -s i container vengono anche fermati, così da poter essere cancellati
 # -f la cli non chiede conferma dell'operazione
-# -v vengono cancellati anche tutti i volumi associati
+# -v vengono cancellati anche tutti i volumi associati
 docker compose -p example rm -s -v -f
-
-# Testare il server
-# 1) Ritorna il contenuto della tabella users creata e riepita con il file ./migrations/init-pg.sql
-curl -XGET http://localhost:8083/db_users
 
 # Multistage build
 docker build --build-arg WHO_TO_GREET="World" --build-arg WHO_TO_NOT_GREET="Moon" -f Dockerfile.multistage -t greetings_multistage .
