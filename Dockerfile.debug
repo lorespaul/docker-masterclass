@@ -20,7 +20,10 @@ VOLUME [ /usr/src/app ]
 
 # Dichiara la porta (una o più) su cui sarà raggiungibile il server
 # Non fa il port forwarding!
+# Porta del server
 EXPOSE 8080
+# Porta del debugger
+EXPOSE 9999
 
 # Non è più possibile eseguire la npm install perchè il package.json non è ancora dentro al container
 # RUN npm install
@@ -28,4 +31,5 @@ EXPOSE 8080
 # Dichiara il comando che verrà eseguito alla partenza del container
 # Installa i pacchetti npm e lancia l'applicazione con nodemon
 # Usa exec per fare in modo che npm run venga lancita sull pid 1 del container (altrimenti non prende correttamente i segnali come SIGTERM)
-ENTRYPOINT npm install && exec npm run debug
+ENTRYPOINT [ "./entrypoint-debug.sh" ]
+CMD [ "npm run debug" ]
