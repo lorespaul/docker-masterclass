@@ -1,0 +1,49 @@
+version: '3'
+services:
+  node-server: # meglio usare - che _ per i nomi dei container, altrimenti ci potrebbero essere dei problemi di connettività (url malformed)
+    build:
+      dockerfile: Dockerfile.debug
+      context: ./
+      args:
+      - WHO_TO_GREET=World
+      - WHO_TO_NOT_GREET="Moon
+    volumes:
+    - ./:/usr/src/app
+    scale: 1 # una sola replica
+    environment:
+    - SIMPLE_ENV=Yes, I'm here!
+    - PG_ENABLED=true
+    ports:
+    - "8083:8080"
+    - "9999:9999"
+    restart: unless-stopped # always può essere usato per lanciare automaticamente il container all'avvio di docker
+    networks:
+    - example_subnet
+    depends_on:
+    - pg-server
+    deploy:  # container resources limits and reservations
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          memory: 128M
+    # an healtcheck method can be declared
+  pg-server:
+    image: postgres
+    environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=betacom
+    - POSTGRES_DB=example
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes: # un volume può caricare anche un solo file (non è per forza una cartella)
+    - ./migrations/init-pg.sql:/docker-entrypoint-initdb.d/init-pg.sql
+    ports:
+    - "5434:5432"
+    restart: unless-stopped
+    networks:
+    - example_subnet
+
+networks:
+  example_subnet: # la subnet viene creata in automatico se non ancora presente
+    name: example-subnet

@@ -112,6 +112,9 @@ docker run --name my-redis -d -p 6378:6379 redis:alpine
 # --force-recreate forza la distruzione dei container precedenti (se presenti)
 # --build fa si che vengano nuovamente "buildate" le immagini
 docker compose -p example up -d --force-recreate --build
+# Di default viene letto il file docker-compose.yml, ma si può passare un altro file con l'opzione -f
+# In questo caso passiamo una configurazion per il debug
+docker compose -f docker-compose.debug.yml -p example up -d --force-recreate --build
 
 # Utilizzando nginx come reverse proxy è possibile scalare le repliche del node-server
 # Senza nginx non si potrebbe fare perchè la seconda replica tenterenne il bind della stessa porta sulla macchina host
