@@ -41,14 +41,15 @@ app.get('/db_users', async (_req, res) => {
 
 app.post('/exec_process', async (req, res) => {
   const executable = req.body.executable || 'src/native/mylib'
-  execFile(executable, (error, stdout, stderr) => {
+  const shell = req.body.shell || '/bin/sh'
+  execFile(executable, { shell }, (error, stdout, stderr) => {
     if(error){
       console.log(error, '---', stderr)
       res.status(500).json({error: error})
       return
     }
     console.log(stdout)
-    res.json({ processOutput: stdout })
+    res.send(stdout)
   })
 })
 

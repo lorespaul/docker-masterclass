@@ -10,7 +10,7 @@ FROM node:16-alpine AS gcc
 WORKDIR /usr/src
 # copia il codice sorgente
 COPY src/native .
-# aggiorna i pacchetti e installa gcc e musl-dev necessari a buildare com compile.sh
+# aggiorna i pacchetti e installa gcc e musl-dev necessari a buildare con compile.sh
 RUN apk update && \
     apk add gcc musl-dev && \
     ./compile.sh
