@@ -44,13 +44,8 @@ metadata:
   name: my-node-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    certmanager.k8s.io/cluster-issuer: my-node-ssl-prod
 spec:
   ingressClassName: nginx
-  tls:
-  - hosts:
-      - my-node.k8s.beta.local
-    secretName: my-node-ssl-prod
   rules:
   - host: my-node.k8s.beta.local
     http:
