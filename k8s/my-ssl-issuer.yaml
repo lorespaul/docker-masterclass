@@ -1,0 +1,11 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+  name: my-node-ssl-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: l.daneo@betacom.it
+    privateKeySecretRef:
+      name: my-node-ssl-prod
+    http01: {}
