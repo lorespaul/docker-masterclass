@@ -78,6 +78,7 @@ spec:
           volumeMounts:
             - name: postgres-persistent-storage
               mountPath: /var/lib/postgresql/data/pgdata
+              subPath: my-postgres
             - name: initialize-db-vol
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
