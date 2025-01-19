@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-node-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-node
+  template:
+    metadata:
+      labels:
+        app: my-node
+    spec:
+      containers:
+        - name: my-node
+          image: cloud.canister.io:5000/my_node
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SIMPLE_ENV
+              value: "Yes, I'm here!"
+            - name: PG_ENABLED
+              value: true
+            - name: PG_HOST
+              value: my-postgres-svc
+      imagePullSecrets:
+         - name: k8s1regcred # secret that K8s uses to access image
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-node-svc
+spec:
+  selector:
+    app: my-node
+  ports:
+    - port: 8080 # expose the service on internal port 80
+      targetPort: 8080 # our NodeJS app listens on port 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-postgres-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-node.k8s.beta.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-node-svc
+            port:
+              number: 8080

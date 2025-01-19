@@ -3,6 +3,7 @@
 node_modules
 migrations
 nginx
+k8s
 Dockerfile
 Dockerfile.debug
 docker-compose.yml
