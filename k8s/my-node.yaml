@@ -23,7 +23,7 @@ spec:
             - name: PG_ENABLED
               value: true
             - name: PG_HOST
-              value: my-postgres-svc
+              value: "my-postgres-svc"
       imagePullSecrets:
          - name: k8s1regcred # secret that K8s uses to access image
 ---
