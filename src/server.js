@@ -30,7 +30,21 @@ app.get('/getenv/:envname', (req, res) => {
 
 app.get('/db_users', async (_req, res) => {
   try{
-    const result = await database.simpleGet()
+    const result = await database.simpleSelect()
+    console.log(result)
+    res.json(result)
+  } catch(e){
+    console.error(e)
+    res.json({})
+  }
+})
+
+app.post('/db_users', async (req, res) => {
+  try{
+    const result = await database.simpleInsert({
+      email: req.body.email,
+      username: req.body.username
+    })
     console.log(result)
     res.json(result)
   } catch(e){

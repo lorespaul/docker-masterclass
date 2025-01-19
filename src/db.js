@@ -23,10 +23,22 @@ if(enabled){
 
 const Database = () => {
   return {
-    simpleGet: async () => {
+    simpleSelect: async () => {
       if(sql){
         const result = await sql`
           SELECT * FROM users      
+        `
+        return result
+      }
+      return {error: 'No database connected'}
+    },
+    simpleInsert: async (user) => {
+      if(sql){
+        const [result] = await sql`
+          INSERT INTO users ${
+            sql(user, 'email', 'username')
+          }
+          returning *;
         `
         return result
       }
