@@ -13,8 +13,8 @@ spec:
   nfs:
     path: /mnt/k8s-pv-share
     server: 192.168.0.85
-  mountOptions:
-    - hard
+  #mountOptions:
+  #  - hard
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
