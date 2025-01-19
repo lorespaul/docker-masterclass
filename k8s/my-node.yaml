@@ -14,14 +14,14 @@ spec:
     spec:
       containers:
         - name: my-node
-          image: cloud.canister.io:5000/my_node
+          image: k8s-1.beta.local:5000/my_node
           ports:
             - containerPort: 8080
           env:
             - name: SIMPLE_ENV
               value: "Yes, I'm here!"
             - name: PG_ENABLED
-              value: true
+              value: "true"
             - name: PG_HOST
               value: "my-postgres-svc"
       imagePullSecrets:
