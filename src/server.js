@@ -17,12 +17,14 @@ app.get('/health', async (_req, res) => {
     try {
       await database.simpleSelect()
     } catch(e) {
+      console.log('Healthcheck failed')
       throw {
         error: 'No database connection',
         message: JSON.stringify(e)
       }
     }
   }
+  console.log('Healthcheck success')
   res.send(`${result}\n`)
 })
 
