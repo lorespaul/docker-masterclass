@@ -1,36 +1,4 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: my-postgres-svc
-spec:
-  type: ClusterIP
-  ports:
-    - port: 5432
-      targetPort: 5432
-  selector:
-    app: my-postgres
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: my-postgres-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: my-postgres.k8s.beta.local
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: my-postgres-svc
-            port:
-              number: 5432
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: my-postgres-init
@@ -92,3 +60,42 @@ spec:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
             claimName: my-pv-claim
+      resources:
+        requests:
+          cpu: 0.25
+          memory: 64Mi
+        limits:
+          cpu: 0.5
+          memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-postgres-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: my-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-postgres-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-postgres.k8s.beta.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-postgres-svc
+            port:
+              number: 5432
