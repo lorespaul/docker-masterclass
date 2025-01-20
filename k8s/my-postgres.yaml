@@ -43,6 +43,13 @@ spec:
           ports:
             - containerPort: 5432
               name: my-postgres
+          resources:
+            requests:
+              cpu: 0.25
+              memory: 64Mi
+            limits:
+              cpu: 0.5
+              memory: 128Mi
           volumeMounts:
             - name: postgres-persistent-storage
               mountPath: /var/lib/postgresql/data/pgdata
@@ -60,13 +67,6 @@ spec:
         - name: postgres-persistent-storage
           persistentVolumeClaim:
             claimName: my-pv-claim
-      resources:
-        requests:
-          cpu: 0.25
-          memory: 64Mi
-        limits:
-          cpu: 0.5
-          memory: 128Mi
 ---
 apiVersion: v1
 kind: Service

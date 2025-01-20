@@ -24,15 +24,15 @@ spec:
               value: "true"
             - name: PG_HOST
               value: "my-postgres-svc"
+          resources:
+            requests:
+              cpu: 0.25
+              memory: 32Mi
+            limits:
+              cpu: 0.25
+              memory: 64Mi
       imagePullSecrets:
          - name: k8s1regcred # secret that K8s uses to access image
-      resources:
-        requests:
-          cpu: 0.25
-          memory: 32Mi
-        limits:
-          cpu: 0.25
-          memory: 64Mi
 ---
 apiVersion: v1
 kind: Service
