@@ -24,7 +24,6 @@ app.get('/health', async (_req, res) => {
       }
     }
   }
-  console.log('Healthcheck success')
   res.send(`${result}\n`)
 })
 
