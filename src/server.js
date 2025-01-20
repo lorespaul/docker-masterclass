@@ -10,6 +10,22 @@ const app = express()
 
 app.use(bodyParser.json())
 
+app.get('/health', async (_req, res) => {
+  const isDBEnabled = database.isEnabled()
+  let result = 'ok'
+  if(isDBEnabled){
+    try {
+      await database.simpleSelect()
+    } catch(e) {
+      throw {
+        error: 'No database connection',
+        message: JSON.stringify(e)
+      }
+    }
+  }
+  res.send(`${result}\n`)
+})
+
 app.get('/greet', (_req, res) => {
   const result = `Hello ${process.env.WHO_TO_GREET}!`
   console.log(result)

@@ -23,6 +23,9 @@ if(enabled){
 
 const Database = () => {
   return {
+    isEnabled: () => {
+      return !!sql
+    },
     simpleSelect: async () => {
       if(sql){
         const result = await sql`
@@ -30,7 +33,7 @@ const Database = () => {
         `
         return result
       }
-      return {error: 'No database connected'}
+      return { error: 'No database connected' }
     },
     simpleInsert: async (user) => {
       if(sql){
@@ -42,7 +45,7 @@ const Database = () => {
         `
         return result
       }
-      return {error: 'No database connected'}
+      return { error: 'No database connected' }
     }
   }
 }
