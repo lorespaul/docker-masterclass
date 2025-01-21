@@ -4,19 +4,32 @@ stages:
 
 variables:
   CHART_DIR: "k8s/charts"
+  APP_NAME: my-node
   DEPLOY_NAME: ${CI_COMMIT_BRANCH//\//-}
+  NAMESPACE: my-node-${CI_COMMIT_BRANCH//\//-}
 
 build-app:
   stage: build
+  tags:
+    - k8s
   image: docker:latest
   servives:
     - docker_dind
   script:
     #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker login k8s-1.beta.local:5000 -u admin -p admin
-    - docker build -t k8s-1.beta.local:5000/my-node:$DEPLOY_NAME .
-    - docker push k8s-1.beta.local:5000/my_node:$DEPLOY_NAME
+    - docker build -t k8s-1.beta.local:5000/$APP_NAME:$DEPLOY_NAME .
+    - docker push k8s-1.beta.local:5000/$APP_NAME:$DEPLOY_NAME
   rules:
-    - if: '$CI_COMMIT_MESSAGE =~ /build/'
+    - if: '$CI_COMMIT_MESSAGE =~ /ci-build/'
+
+deploy-app:
+  stage: deploy
   tags:
-    - docker
+    - k8s
+  image: alpine/helm:3.2.1
+  script:
+    - cd $CHART_DIR
+    - helm upgrade --install --create-namespace --namespace $APP_NAME -f values.yaml --set node.appname=$APP_NAME,node.image.tag=$DEPLOY_NAME --set-file db.initFile=../../migrations/init-pg.sql $NAMESPACE ./  
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /ci-deploy/'
