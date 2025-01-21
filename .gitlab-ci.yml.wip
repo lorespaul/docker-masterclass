@@ -1,0 +1,22 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  CHART_DIR: "k8s/charts"
+  DEPLOY_NAME: ${CI_COMMIT_BRANCH//\//-}
+
+build-app:
+  stage: build
+  image: docker:latest
+  servives:
+    - docker_dind
+  script:
+    #- docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+    - docker login k8s-1.beta.local:5000 -u admin -p admin
+    - docker build -t k8s-1.beta.local:5000/my-node:$DEPLOY_NAME .
+    - docker push k8s-1.beta.local:5000/my_node:$DEPLOY_NAME
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /build/'
+  tags:
+    - docker

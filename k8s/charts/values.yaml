@@ -1,0 +1,30 @@
+registry:
+  host: k8s-1.beta.local:5000
+  secretName: k8s1regcred
+  sourceSecret:
+    name: k8s1regcred
+    namespace: default
+
+node:
+  appname: # from --set
+  image:
+    tag: # from --set
+  port: 8080
+  replicas: 2
+
+db:
+  appname: my-postgres
+  image:
+    name: postgres
+    tag: 16.6-alpine
+  port: 5432
+  username: root
+  password: betacom
+  database: example
+  initFile: # from --set-file
+
+volume:
+  capacity: 100Mi
+  nfsPath: /mnt/k8s-pv-share
+  nfsHost: 192.168.0.85
+  pvName: pv0001

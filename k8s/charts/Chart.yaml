@@ -1,0 +1,27 @@
+apiVersion: v2
+name: my-node
+description: A Helm chart for example deploying my-node test app on Kubernetes
+
+type: application
+version: 1.0.0
+appVersion: 1.0.0
+
+maintainers:
+  - name: Lorenzo Daneo
+    email: l.daneo@betacom.it
+
+keywords:
+  - web
+  - application
+  - example
+
+# home: https://example.com   # Sito web ufficiale del progetto (opzionale)
+# sources:                    # Sorgenti del progetto (es. codice sorgente)
+#   - https://github.com/example/my-application
+
+# dependencies:               # Dipendenze da altri chart (opzionale)
+#   - name: redis
+#     version: 6.0.0
+#     repository: https://charts.bitnami.com/bitnami
+
+# icon: https://example.com/icon.png  # URL per l'icona del chart (opzionale)

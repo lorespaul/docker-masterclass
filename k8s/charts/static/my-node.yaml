@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-node
-          image: k8s-1.beta.local:5000/my_node
+          image: k8s-1.beta.local:5000/my-node:latest
           ports:
             - containerPort: 8080
           env:

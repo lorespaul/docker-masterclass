@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ .Values.node.appname }}-{{ .Values.node.image.tag }}-deployment"
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.node.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.node.appname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.node.appname }}
+    spec:
+      containers:
+        - name: my-node
+          image: "{{ .Values.registry.host }}/{{ .Values.node.appname }}:{{ .Values.node.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.node.port }}
+              name: default
+          env:
+            - name: SIMPLE_ENV
+              value: "Yes, I'm {{ .Values.node.appname }}-{{ .Values.node.image.tag }}!"
+            - name: PG_ENABLED
+              value: "true"
+            - name: PG_HOST
+              value: "{{ .Values.db.appname }}-{{ .Values.node.image.tag }}-svc"
+            - name: PG_PORT
+              value: "{{ .Values.db.port }}"
+            - name: PG_USER
+              value: {{ .Values.db.username }}
+            - name: PG_PASS
+              value: {{ .Values.db.password }}
+            - name: PG_DB
+              value: {{ .Values.db.database }}
+          resources:
+            requests:
+              cpu: 0.25
+              memory: 32Mi
+            limits:
+              cpu: 0.25
+              memory: 64Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.node.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            failureThreshold: 5
+      imagePullSecrets:
+         - name: {{ .Values.registry.secretName }} # secret that K8s uses to access image
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.node.appname }}-{{ .Values.node.image.tag }}-svc"
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ .Values.node.appname }}
+  ports:
+    - port: {{ .Values.node.port }} # expose the service on internal port 80
+      targetPort: {{ .Values.node.port }} # our NodeJS app listens on port 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Values.node.appname }}-{{ .Values.node.image.tag }}-ingress"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "{{ .Values.node.appname }}-{{ .Values.node.image.tag }}.k8s.beta.local"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: "{{ .Values.node.appname }}-{{ .Values.node.image.tag }}-svc"
+            port:
+              number: {{ .Values.node.port }}
